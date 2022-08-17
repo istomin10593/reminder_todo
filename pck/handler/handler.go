@@ -6,6 +6,7 @@ type Handler struct {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	auth := router.Group("/auth")
