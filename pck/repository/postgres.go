@@ -16,15 +16,15 @@ type Config struct {
 }
 
 func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
-	db, err1 := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
 		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
-	if err1 != nil {
-		return nil, err1
+	if err != nil {
+		return nil, err
 	}
 
-	err2 := db.Ping()
-	if err2 != nil {
-		return nil, err2
+	err = db.Ping()
+	if err != nil {
+		return nil, err
 	}
 
 	return db, nil
