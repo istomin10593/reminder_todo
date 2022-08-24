@@ -1,8 +1,18 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	todo "github.com/istomin10593/reminder_todo"
+)
 
 func (h *Handler) sighUp(c *gin.Context) {
+	var input todo.User
+
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+	}
 
 }
 
