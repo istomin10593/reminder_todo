@@ -9,6 +9,7 @@ import (
 
 const (
 	authorizationHeader = "Authorization"
+	userCtx             = "userId"
 )
 
 func (h *Handler) userIdentity(c *gin.Context) {
@@ -23,5 +24,11 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 	}
 
-	// parse token
+	userId, err := h.services.Authorization.ParseToken(headerParts[1])
+	if err != nil {
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	c.Set(userCtx, userId)
 }
