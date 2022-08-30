@@ -3,6 +3,7 @@ package service
 import (
 	"crypto/sha1"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -11,9 +12,7 @@ import (
 )
 
 const (
-	salt       = "jk34bsfv98yr9fber"
-	signingKey = "IEV&UBE(&VG(EV*eyvi&SGEvie"
-	tokenTTL   = 12 * time.Hour
+	tokenTTL = 12 * time.Hour
 )
 
 type tokenClaims struct {
@@ -47,12 +46,12 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		user.Id,
 	})
 
-	return token.SignedString([]byte(signingKey))
+	return token.SignedString([]byte(os.Getenv("SIGNINGKEY")))
 }
 
 func generatePasswordHash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))
 
-	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
+	return fmt.Sprintf("%x", hash.Sum([]byte(os.Getenv("SALT"))))
 }
