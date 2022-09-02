@@ -4,13 +4,23 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	todo "github.com/istomin10593/reminder_todo"
 )
 
 func (h *Handler) createList(c *gin.Context) {
-	id, _ := c.Get(userCtx)
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
-	})
+	id, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id not found")
+		return
+	}
+
+	var input todo.TodoList
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// call service method
 }
 
 func (h *Handler) getAllLists(c *gin.Context) {
