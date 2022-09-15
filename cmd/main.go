@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+	"os/signal"
+	"syscall"
 
 	todo "github.com/istomin10593/reminder_todo"
 	"github.com/istomin10593/reminder_todo/pck/handler"
@@ -48,6 +50,10 @@ func main() {
 	}()
 
 	logrus.Print("TodoApp Started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
 }
 
 func initConfig() error {
